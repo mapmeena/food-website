@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up & Log In</title>
+    <style>
+        /* Basic styling for the layout */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            width: 300px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .toggle-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: #333;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 id="formTitle">Sign Up</h2>
+        <form id="authForm">
+            <!-- Username (only visible in Sign-Up mode) -->
+            <div class="form-group" id="usernameGroup">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter Username">
+                <div class="error" id="usernameError"></div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter Email">
+                <div class="error" id="emailError"></div>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter Password">
+                <div class="error" id="passwordError"></div>
+            </div>
+
+            <!-- Confirm Password (only visible in Sign-Up mode) -->
+            <div class="form-group" id="confirmPasswordGroup">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" placeholder="Confirm Password">
+                <div class="error" id="confirmPasswordError"></div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="button" onclick="handleSubmit()">Sign Up</button>
+
+            <!-- Toggle Link -->
+            <span class="toggle-link" onclick="toggleForm()">Already have an account? Log In</span>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript for toggling between Sign Up and Log In, and form validation
+        let isSignUp = true;
+
+        function toggleForm() {
+            isSignUp = !isSignUp;
+
+            document.getElementById('formTitle').textContent = isSignUp ? 'Sign Up' : 'Log In';
+            document.getElementById('usernameGroup').style.display = isSignUp ? 'block' : 'none';
+            document.getElementById('confirmPasswordGroup').style.display = isSignUp ? 'block' : 'none';
+            document.querySelector('button').textContent = isSignUp ? 'Sign Up' : 'Log In';
+            document.querySelector('.toggle-link').textContent = isSignUp ? 'Already have an account? Log In' : 'Don\'t have an account? Sign Up';
+        }
+
+        function handleSubmit() {
+            // Clear previous error messages
+            clearErrors();
+
+            // Get form values
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+            // Basic validation
+            let isValid = true;
+            if (isSignUp && username === '') {
+                isValid = false;
+                document.getElementById('usernameError').textContent = 'Username is required.';
+            }
+            if (email === '') {
+                isValid = false;
+                document.getElementById('emailError').textContent = 'Email is required.';
+            } else if (!validateEmail(email)) {
+                isValid = false;
+                document.getElementById('emailError').textContent = 'Invalid email format.';
+            }
+            if (password === '') {
+                isValid = false;
+                document.getElementById('passwordError').textContent = 'Password is required.';
+            } else if (isSignUp && password.length < 6) {
+                isValid = false;
+                document.getElementById('passwordError').textContent = 'Password must be at least 6 characters.';
+            }
+            if (isSignUp && confirmPassword !== password) {
+                isValid = false;
+                document.getElementById('confirmPasswordError').textContent = 'Passwords do not match.';
+            }
+
+            // Show success message if the form is valid
+            if (isValid) {
+                alert(isSignUp ? 'Account created successfully!' : 'Logged in successfully!');
+            }
+        }
+
+        // Email validation function
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Clear all error messages
+        function clearErrors() {
+            document.getElementById('usernameError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+            document.getElementById('confirmPasswordError').textContent = '';
+        }
+    </script>
+</body>
+</html>
